@@ -9,21 +9,27 @@
 /* Begin PBXBuildFile section */
 		74D0869627CFBBB6008878BF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D0869527CFBBB6008878BF /* AppDelegate.swift */; };
 		74D0869827CFBBB6008878BF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D0869727CFBBB6008878BF /* SceneDelegate.swift */; };
-		74D0869A27CFBBB6008878BF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D0869927CFBBB6008878BF /* ViewController.swift */; };
 		74D0869D27CFBBB6008878BF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D0869B27CFBBB6008878BF /* Main.storyboard */; };
 		74D0869F27CFBBB8008878BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74D0869E27CFBBB8008878BF /* Assets.xcassets */; };
 		74D086A227CFBBB8008878BF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D086A027CFBBB8008878BF /* LaunchScreen.storyboard */; };
+		74D086AE27CFC61F008878BF /* RadioCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D086AD27CFC61F008878BF /* RadioCollectionViewController.swift */; };
+		74D086B227CFC6AF008878BF /* RadioStationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D086B127CFC6AF008878BF /* RadioStationCollectionViewCell.swift */; };
+		74D086B527CFC70E008878BF /* RadioStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D086B427CFC70E008878BF /* RadioStation.swift */; };
+		74D086B727CFC737008878BF /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D086B627CFC737008878BF /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		74D0869227CFBBB6008878BF /* SakhaRadioApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SakhaRadioApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74D0869527CFBBB6008878BF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74D0869727CFBBB6008878BF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		74D0869927CFBBB6008878BF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		74D0869C27CFBBB6008878BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		74D0869E27CFBBB8008878BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		74D086A127CFBBB8008878BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74D086A327CFBBB8008878BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		74D086AD27CFC61F008878BF /* RadioCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioCollectionViewController.swift; sourceTree = "<group>"; };
+		74D086B127CFC6AF008878BF /* RadioStationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioStationCollectionViewCell.swift; sourceTree = "<group>"; };
+		74D086B427CFC70E008878BF /* RadioStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioStation.swift; sourceTree = "<group>"; };
+		74D086B627CFC737008878BF /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +62,10 @@
 		74D0869427CFBBB6008878BF /* SakhaRadioApp */ = {
 			isa = PBXGroup;
 			children = (
+				74D086B327CFC6E2008878BF /* Models */,
+				74D086AF27CFC659008878BF /* Services */,
 				74D086AC27CFBC6A008878BF /* ViewControllers */,
+				74D086B027CFC67B008878BF /* Cells */,
 				74D086A927CFBBC9008878BF /* Storyboards */,
 				74D086AB27CFBC5A008878BF /* Resources */,
 				74D086AA27CFBBE1008878BF /* App */,
@@ -94,9 +103,33 @@
 		74D086AC27CFBC6A008878BF /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				74D0869927CFBBB6008878BF /* ViewController.swift */,
+				74D086AD27CFC61F008878BF /* RadioCollectionViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		74D086AF27CFC659008878BF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				74D086B627CFC737008878BF /* DataManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		74D086B027CFC67B008878BF /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				74D086B127CFC6AF008878BF /* RadioStationCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		74D086B327CFC6E2008878BF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				74D086B427CFC70E008878BF /* RadioStation.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -170,9 +203,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74D0869A27CFBBB6008878BF /* ViewController.swift in Sources */,
+				74D086B727CFC737008878BF /* DataManager.swift in Sources */,
+				74D086AE27CFC61F008878BF /* RadioCollectionViewController.swift in Sources */,
 				74D0869627CFBBB6008878BF /* AppDelegate.swift in Sources */,
 				74D0869827CFBBB6008878BF /* SceneDelegate.swift in Sources */,
+				74D086B527CFC70E008878BF /* RadioStation.swift in Sources */,
+				74D086B227CFC6AF008878BF /* RadioStationCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
