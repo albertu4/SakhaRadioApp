@@ -5,15 +5,20 @@
 //  Created by Михаил Иванов on 03.03.2022.
 //
 
-import UIKit
-
-enum RadioStreamURL: String {
-    case victoriyaFM = "http://37.139.33.202:8000/stream.mp3"
-    case tetimFM = "https://icecast-saha.cdnvideo.ru/saha"
-}
-
 struct Radio {
     let title: String
-    let icon: UIImage
+    let icon: String
     let station: RadioStreamURL
+    
+    static func getRadioStation() -> [Radio] {
+        [
+            Radio(title: DataManager.shared.stations[0],
+                  icon: "victoriyaRadioIcon",
+                  station: RadioStreamURL.victoriyaFM),
+            
+            Radio(title: DataManager.shared.stations[1],
+                  icon: "tetimRadioIcon",
+                  station: RadioStreamURL.tetimFM)
+        ]
+    }
 }
