@@ -18,7 +18,11 @@ struct Radio {
             
             Radio(title: DataManager.shared.stations[1],
                   icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM)
+                  station: RadioStreamURL.tetimFM),
+            
+            Radio(title: DataManager.shared.stations[2],
+                  icon: "radioNRJ",
+                  station: RadioStreamURL.radioNRJ)
         ]
     }
 }

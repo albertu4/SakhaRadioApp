@@ -6,18 +6,11 @@
 //
 
 import UIKit
-
-
-
-private let reuseIdentifier = "radioStation"
+import AVKit
 
 class RadioCollectionViewController: UICollectionViewController {
     
-    let radioStations = Radio.getRadioStation()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    private let radioStations = Radio.getRadioStation()
 
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -25,7 +18,7 @@ class RadioCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! RadioStationCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "radioStation", for: indexPath) as! RadioStationCollectionViewCell
         
         let radioStation = radioStations[indexPath.row]
         cell.configure(radio: radioStation)
@@ -34,6 +27,7 @@ class RadioCollectionViewController: UICollectionViewController {
     }
 }
 
+//MARK: - extension
 extension RadioCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
