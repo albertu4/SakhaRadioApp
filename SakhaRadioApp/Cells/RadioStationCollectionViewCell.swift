@@ -14,16 +14,15 @@ class RadioStationCollectionViewCell: UICollectionViewCell {
     @IBOutlet var radioIcon: UIImageView!
     @IBOutlet var playButton: UIButton!
     
-    var radioPlayer: AVPlayer!
+    var radioPlayer: AVPlayer?
     
     @IBAction func playRadio() {
-        radioPlayer.pause()
-        if radioPlayer.isExternalPlaybackActive {
-            radioPlayer.pause()
-            playButton.titleLabel?.text = "▶️"
+        if radioPlayer?.timeControlStatus == .paused {
+            radioPlayer?.play()
+            playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
         } else {
-            radioPlayer.play()
-            playButton.titleLabel?.text = "⏸"
+            radioPlayer?.pause()
+            playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         }
     }
     
@@ -34,8 +33,13 @@ class RadioStationCollectionViewCell: UICollectionViewCell {
     }
     
     private func playSound(from url: String) {
-        let streamURL = URL(string: url)
-        radioPlayer = AVPlayer(url: streamURL!)
+        guard let streamURL = URL(string: url) else { return }
+        let playerItem = AVPlayerItem.init(url: streamURL)
+            radioPlayer = AVPlayer(playerItem: playerItem)
     }
+    
+//    private func changeStation(to url: String) {
+//        radioPlayer?.replaceCurrentItem(with: <#T##AVPlayerItem?#>)
+//    }
 }
 

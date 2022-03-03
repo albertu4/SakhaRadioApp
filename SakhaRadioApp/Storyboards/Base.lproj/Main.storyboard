@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,54 +25,49 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" reuseIdentifier="radioStation" id="mP4-6B-srT" customClass="RadioStationCollectionViewCell" customModule="SakhaRadioApp" customModuleProvider="target">
-                                <rect key="frame" x="33.5" y="0.0" width="253.5" height="128"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" insetsLayoutMarginsFromSafeArea="NO" id="Kos-Vi-RGj">
-                                    <rect key="frame" x="0.0" y="0.0" width="253.5" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleAspectFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="HY3-PX-kGk">
-                                            <rect key="frame" x="16" y="0.0" width="221.5" height="128"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="crR-fL-lPr">
+                                            <rect key="frame" x="188.5" y="24" width="103" height="82"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:Jpe-bY-CaY:image" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jpe-bY-CaY">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="Jpe-bY-CaY" secondAttribute="height" multiplier="1:1" id="lHq-G6-WXN"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="19" translatesAutoresizingMaskIntoConstraints="NO" id="crR-fL-lPr">
-                                                    <rect key="frame" x="138" y="23.5" width="83.5" height="81"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="radioName" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="anU-LO-Cad">
-                                                            <rect key="frame" x="0.0" y="0.0" width="83.5" height="31"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="59h-tQ-VKh">
-                                                            <rect key="frame" x="0.0" y="50" width="83.5" height="31"/>
-                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="filled" title="Play">
-                                                                <color key="baseForegroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="baseBackgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            </buttonConfiguration>
-                                                            <connections>
-                                                                <action selector="playRadio" destination="mP4-6B-srT" eventType="touchUpInside" id="04x-4N-Evy"/>
-                                                            </connections>
-                                                        </button>
-                                                    </subviews>
-                                                </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="radioName" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="anU-LO-Cad">
+                                                    <rect key="frame" x="0.0" y="0.0" width="103" height="38.5"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="59h-tQ-VKh">
+                                                    <rect key="frame" x="34" y="43.5" width="35.5" height="38.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                                        <imageReference key="image" image="play.fill" catalog="system" symbolScale="default"/>
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="40"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="playRadio" destination="mP4-6B-srT" eventType="touchUpInside" id="04x-4N-Evy"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </stackView>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:Jpe-bY-CaY:image" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jpe-bY-CaY">
+                                            <rect key="frame" x="20" y="1" width="128" height="128"/>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="HY3-PX-kGk" secondAttribute="trailing" constant="16" id="7WV-Y7-85g"/>
-                                        <constraint firstItem="HY3-PX-kGk" firstAttribute="leading" secondItem="Kos-Vi-RGj" secondAttribute="leading" constant="16" id="WKY-F9-7fS"/>
-                                        <constraint firstItem="HY3-PX-kGk" firstAttribute="centerY" secondItem="Kos-Vi-RGj" secondAttribute="centerY" id="XNA-QV-cSh"/>
+                                        <constraint firstItem="crR-fL-lPr" firstAttribute="centerY" secondItem="Kos-Vi-RGj" secondAttribute="centerY" id="I0Q-VI-M1f"/>
+                                        <constraint firstItem="Jpe-bY-CaY" firstAttribute="leading" secondItem="Kos-Vi-RGj" secondAttribute="leading" constant="20" id="JHH-iS-KDa"/>
+                                        <constraint firstItem="Jpe-bY-CaY" firstAttribute="centerY" secondItem="Kos-Vi-RGj" secondAttribute="centerY" id="SRB-3L-IlB"/>
+                                        <constraint firstItem="crR-fL-lPr" firstAttribute="centerX" secondItem="Kos-Vi-RGj" secondAttribute="centerX" constant="80" id="ULJ-9u-BZa"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                <size key="customSize" width="320" height="130"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <integer key="value" value="8"/>
@@ -15682,5 +15678,6 @@ AA47+gAOO/8ADjwMAA48DwAOPBwADjwhAA48KQAOPCwADjwxAA48OQAAAAAAAAQBAAAAAAAAAGgAAAAA
 AAAAAAAAAAAADjw8A
 </mutableData>
         </image>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
     </resources>
 </document>
