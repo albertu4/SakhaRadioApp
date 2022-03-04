@@ -8,7 +8,7 @@
 class DataManager {
     static let shared = DataManager()
     
-    let stations = ["Сахалыы \nВиктория", "Тэтим \nРадио", "Радио NRJ"]
+    let stations = ["Сахалыы Виктория", "Тэтим Радио", "Радио NRJ"]
     
     private init() {}
 }

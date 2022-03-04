@@ -10,18 +10,28 @@ import AVKit
 
 class RadioListViewController: UIViewController {
     
+    
+    @IBOutlet weak var volumeSlider: UISlider!
+    
     private var radioList = Radio.getRadioStation()
     
     private let radioPlayer: AVPlayer = {
         let radioPlayer = AVPlayer()
         return radioPlayer
     }()
+    
+    private var lastRadioURL = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     private func playRadio(with url: String) {
+        print(url, lastRadioURL)
+        if url != lastRadioURL {
+            radioPlayer.pause()
+        }
+        lastRadioURL = url
         guard let radioStream = URL(string: url) else { return }
         let radioItem = AVPlayerItem(url: radioStream)
         radioPlayer.replaceCurrentItem(with: radioItem)
@@ -41,6 +51,9 @@ class RadioListViewController: UIViewController {
         }
     }
     
+    @IBAction func changeVolume() {
+        radioPlayer.volume = volumeSlider.value
+    }
 }
 
 extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -57,6 +70,8 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         
         content.text = radioStation.title
         content.image = UIImage(named: radioStation.icon)
+        content.imageProperties.maximumSize = CGSize(width: 70, height: 70)
+        content.imageProperties.cornerRadius = tableView.rowHeight / 2
         
         cell.contentConfiguration = content
         return cell
@@ -67,6 +82,28 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         playRadio(with: radioURL)
     }
     
-    
-    
+//    //MARK: - Animations
+//        private func enlargeRadioImage() {
+//            UIView.animate(withDuration: 1,
+//                           delay: 0,
+//                           usingSpringWithDamping: 0.5,
+//                           initialSpringVelocity: 1,
+//                           options: .curveEaseInOut,
+//                           animations: {
+//                tableView. = .identity
+//            }, completion: nil)
+//        }
+//
+//        private func reduceRadioImage() {
+//            UIView.animate(withDuration: 1,
+//                           delay: 0,
+//                           usingSpringWithDamping: 0.5,
+//                           initialSpringVelocity: 1,
+//                           options: .curveEaseInOut,
+//                           animations: {
+//                let scale: CGFloat = 0.8
+//                self.radioIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
+//            }, completion: nil)
+//        }
+//    }
 }
