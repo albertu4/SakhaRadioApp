@@ -10,11 +10,19 @@ import AVKit
 
 class RadioListViewController: UIViewController {
     
+    // MARK: -IBOutlets
     @IBOutlet weak var volumeSlider: UISlider!
     
     @IBOutlet weak var playerButtonLabel: UIButton!
     
+    @IBOutlet weak var radioIcon: UIImageView!
+    
+    @IBOutlet weak var radioTitle: UILabel!
+    
+    //MARK: -Private properties
     private var radioList = Radio.getRadioStation()
+    
+    private var animationStarted = false
     
     private let radioPlayer: AVPlayer = {
         let radioPlayer = AVPlayer()
@@ -23,22 +31,24 @@ class RadioListViewController: UIViewController {
     
     private var lastRadioURL = ""
 
+    //MARK: - overrides
     override func viewDidLoad() {
         super.viewDidLoad()
         radioPlayer.volume = volumeSlider.value
-        
+        radioIcon.frame = CGRect(x: 2, y: 2, width: 2, height: 2)
         setupNavigationBar()
     }
     
+    //MARK: - IBActions
     @IBAction func changeVolume() {
         radioPlayer.volume = volumeSlider.value
     }
-    
     
     @IBAction func playAndPauseRadioButton() {
         playAndPauseRadio()
     }
     
+    //MARK: - private methods
     private func playRadio(with url: String) {
         if url != lastRadioURL {
             radioPlayer.pause()
@@ -55,7 +65,6 @@ class RadioListViewController: UIViewController {
     private func playAndPauseRadio() {
         if radioPlayer.timeControlStatus == .paused {
             radioPlayer.play()
-            
             reduceRadioImage()
             playerButtonLabel.setImage(UIImage(systemName: "pause.circle.fill"), for: .normal)
         } else {
@@ -64,7 +73,6 @@ class RadioListViewController: UIViewController {
             playerButtonLabel.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
         }
     }
-    
     
     private func setupNavigationBar() {
         let navBarAppearance = UINavigationBarAppearance()
@@ -76,10 +84,9 @@ class RadioListViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
-    
-    
 }
 
+//MARK: - Extensions
 extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,7 +113,8 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let radioURL = radioList[indexPath.row].station.rawValue
-        tableView.deselectRow(at: indexPath, animated: true)
+        radioIcon.image = UIImage(named: radioList[indexPath.row].icon)
+        radioTitle.text = radioList[indexPath.row].title
         playRadio(with: radioURL)
     }
     
