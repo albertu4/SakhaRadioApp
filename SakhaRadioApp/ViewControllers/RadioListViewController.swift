@@ -10,8 +10,9 @@ import AVKit
 
 class RadioListViewController: UIViewController {
     
-    
     @IBOutlet weak var volumeSlider: UISlider!
+    
+    @IBOutlet weak var playerButtonLabel: UIButton!
     
     private var radioList = Radio.getRadioStation()
     
@@ -24,10 +25,21 @@ class RadioListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        radioPlayer.volume = volumeSlider.value
+        
+        setupNavigationBar()
+    }
+    
+    @IBAction func changeVolume() {
+        radioPlayer.volume = volumeSlider.value
+    }
+    
+    
+    @IBAction func playAndPauseRadioButton() {
+        playAndPauseRadio()
     }
     
     private func playRadio(with url: String) {
-        print(url, lastRadioURL)
         if url != lastRadioURL {
             radioPlayer.pause()
         }
@@ -37,23 +49,35 @@ class RadioListViewController: UIViewController {
         radioPlayer.replaceCurrentItem(with: radioItem)
         
         playAndPauseRadio()
+        playerButtonLabel.isEnabled = true
     }
     
     private func playAndPauseRadio() {
         if radioPlayer.timeControlStatus == .paused {
             radioPlayer.play()
-//            enlargeRadioImage()
-//            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            
+            reduceRadioImage()
+            playerButtonLabel.setImage(UIImage(systemName: "pause.circle.fill"), for: .normal)
         } else {
             radioPlayer.pause()
-//            reduceRadioImage()
-//            sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            enlargeRadioImage()
+            playerButtonLabel.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
         }
     }
     
-    @IBAction func changeVolume() {
-        radioPlayer.volume = volumeSlider.value
+    
+    private func setupNavigationBar() {
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.backgroundColor = .systemPink
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
+    
+    
 }
 
 extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -69,9 +93,12 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         let radioStation = radioList[indexPath.row]
         
         content.text = radioStation.title
+        content.textProperties.alignment = .center
+        content.textProperties.font = .systemFont(ofSize: 18, weight: .medium)
+        
         content.image = UIImage(named: radioStation.icon)
-        content.imageProperties.maximumSize = CGSize(width: 70, height: 70)
-        content.imageProperties.cornerRadius = tableView.rowHeight / 2
+        content.imageProperties.reservedLayoutSize = CGSize(width: 60, height: 60)
+        content.directionalLayoutMargins.leading = 25
         
         cell.contentConfiguration = content
         return cell
@@ -79,31 +106,32 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let radioURL = radioList[indexPath.row].station.rawValue
+        tableView.deselectRow(at: indexPath, animated: true)
         playRadio(with: radioURL)
     }
     
-//    //MARK: - Animations
-//        private func enlargeRadioImage() {
-//            UIView.animate(withDuration: 1,
-//                           delay: 0,
-//                           usingSpringWithDamping: 0.5,
-//                           initialSpringVelocity: 1,
-//                           options: .curveEaseInOut,
-//                           animations: {
-//                tableView. = .identity
-//            }, completion: nil)
-//        }
-//
-//        private func reduceRadioImage() {
-//            UIView.animate(withDuration: 1,
-//                           delay: 0,
-//                           usingSpringWithDamping: 0.5,
-//                           initialSpringVelocity: 1,
-//                           options: .curveEaseInOut,
-//                           animations: {
-//                let scale: CGFloat = 0.8
-//                self.radioIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
-//            }, completion: nil)
-//        }
-//    }
+    //MARK: - Animations
+        private func enlargeRadioImage() {
+            UIView.animate(withDuration: 1,
+                           delay: 0,
+                           usingSpringWithDamping: 0.5,
+                           initialSpringVelocity: 1,
+                           options: .curveEaseInOut,
+                           animations: {
+                self.playerButtonLabel.transform = .identity
+            }, completion: nil)
+        }
+
+        private func reduceRadioImage() {
+            UIView.animate(withDuration: 1,
+                           delay: 0,
+                           usingSpringWithDamping: 0.5,
+                           initialSpringVelocity: 1,
+                           options: .curveEaseInOut,
+                           animations: {
+                let scale: CGFloat = 0.8
+                self.playerButtonLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+            }, completion: nil)
+        }
+    
 }
