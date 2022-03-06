@@ -113,33 +113,53 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let radioURL = radioList[indexPath.row].station.rawValue
-        radioIcon.image = UIImage(named: radioList[indexPath.row].icon)
-        radioTitle.text = radioList[indexPath.row].title
+        if radioTitle.text != radioList[indexPath.row].title {
+            setPlayerData(index: indexPath.row)
+        }
         playRadio(with: radioURL)
     }
     
     //MARK: - Animations
-        private func enlargeRadioImage() {
-            UIView.animate(withDuration: 1,
-                           delay: 0,
-                           usingSpringWithDamping: 0.5,
-                           initialSpringVelocity: 1,
-                           options: .curveEaseInOut,
-                           animations: {
-                self.playerButtonLabel.transform = .identity
-            }, completion: nil)
-        }
-
-        private func reduceRadioImage() {
-            UIView.animate(withDuration: 1,
-                           delay: 0,
-                           usingSpringWithDamping: 0.5,
-                           initialSpringVelocity: 1,
-                           options: .curveEaseInOut,
-                           animations: {
-                let scale: CGFloat = 0.8
-                self.playerButtonLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
-            }, completion: nil)
-        }
+    private func enlargeRadioImage() {
+        UIView.animate(withDuration: 1,
+                       delay: 0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 1,
+                       options: .curveEaseInOut,
+                       animations: {
+            self.playerButtonLabel.transform = .identity
+        }, completion: nil)
+    }
     
+    private func reduceRadioImage() {
+        UIView.animate(withDuration: 1,
+                       delay: 0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 1,
+                       options: .curveEaseInOut,
+                       animations: {
+            let scale: CGFloat = 0.8
+            self.playerButtonLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }, completion: nil)
+    }
+    
+    private func showPlayerTitleAndIcon() {
+        UIView.animate(withDuration: 2,
+                       delay: 0.2,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 1,
+                       options: .curveEaseInOut,
+                       animations: {
+            self.radioIcon.alpha = 1
+            self.radioTitle.alpha = 1
+        }, completion: nil)
+    }
+    
+    private func setPlayerData(index: Int) {
+        radioIcon.image = UIImage(named: radioList[index].icon)
+        radioTitle.text = radioList[index].title
+        radioIcon.alpha = 0
+        radioTitle.alpha = 0
+        showPlayerTitleAndIcon()
+    }
 }
