@@ -7,6 +7,7 @@
 
 import UIKit
 import AVKit
+import MediaPlayer
 
 class RadioListViewController: UIViewController {
     
@@ -24,7 +25,7 @@ class RadioListViewController: UIViewController {
     
     private var animationStarted = false
     
-    private let radioPlayer: AVPlayer = {
+    let radioPlayer: AVPlayer = {
         let radioPlayer = AVPlayer()
         return radioPlayer
     }()
@@ -72,6 +73,10 @@ class RadioListViewController: UIViewController {
             enlargeRadioImage()
             playerButtonLabel.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
         }
+    }
+    
+    private func togglePlayAndPause() {
+        radioPlayer.timeControlStatus == .playing ? radioPlayer.pause(): radioPlayer.pause()
     }
     
     private func setupNavigationBar() {
@@ -161,5 +166,26 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         radioIcon.alpha = 0
         radioTitle.alpha = 0
         showPlayerTitleAndIcon()
+    }
+    
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        guard let event = event, event.type == .remoteControl else { return }
+        
+        switch event.subtype {
+        case .remoteControlPlay:
+            radioPlayer.play()
+        case .remoteControlPause:
+            radioPlayer.pause()
+        case .remoteControlTogglePlayPause:
+            togglePlayAndPause()
+        case .remoteControlNextTrack:
+            print("next")
+        case .remoteControlPreviousTrack:
+            print("previous")
+        default:
+            break
+        }
+        
     }
 }

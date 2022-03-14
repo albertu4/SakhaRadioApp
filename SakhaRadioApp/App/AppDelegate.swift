@@ -6,15 +6,45 @@
 //
 
 import UIKit
+import AVKit
+import MediaPlayer
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        //Create audio session
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowAirPlay])
+        } catch {
+            print("Failed to set audio session category")
+        }
+        
         return true
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        //
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        //
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        //
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        UIApplication.shared.endReceivingRemoteControlEvents()
     }
 
     // MARK: UISceneSession Lifecycle
