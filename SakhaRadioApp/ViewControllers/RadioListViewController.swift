@@ -71,7 +71,7 @@ class RadioListViewController: UIViewController {
         } else {
             radioPlayer.pause()
             enlargeRadioImage()
-            playerButtonLabel.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
+            playerButtonLabel.setImage(UIImage(systemName: "play.circle"), for: .normal)
         }
     }
     
@@ -82,7 +82,7 @@ class RadioListViewController: UIViewController {
     private func setupNavigationBar() {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.backgroundColor = .systemPink
+        navBarAppearance.backgroundColor = UIColor(named: "mainColor")
         navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 
@@ -186,6 +186,5 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         default:
             break
         }
-        
     }
 }
