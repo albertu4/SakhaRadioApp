@@ -21,26 +21,24 @@ struct Radio {
                   station: RadioStreamURL.tetimFM),
             
             Radio(title: DataManager.shared.stations[2],
-                  icon: "radioNRJ",
-                  station: RadioStreamURL.radioNRJ),
-            Radio(title: DataManager.shared.stations[1],
-                  icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM),
-            Radio(title: DataManager.shared.stations[1],
-                  icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM),
-            Radio(title: DataManager.shared.stations[1],
-                  icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM),
-            Radio(title: DataManager.shared.stations[1],
-                  icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM),
-            Radio(title: DataManager.shared.stations[1],
-                  icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM),
-            Radio(title: DataManager.shared.stations[1],
-                  icon: "tetimRadioIcon",
-                  station: RadioStreamURL.tetimFM),
+                  icon: "europaPlus",
+                  station: RadioStreamURL.europaPlus),
+            
+            Radio(title: DataManager.shared.stations[3],
+                  icon: "dolgunRadio",
+                  station: RadioStreamURL.dolgunRadio),
+            
+            Radio(title: DataManager.shared.stations[4],
+                  icon: "mayaDolguna",
+                  station: RadioStreamURL.mayaDolguna),
+            
+            Radio(title: DataManager.shared.stations[5],
+                  icon: "algysRadio",
+                  station: RadioStreamURL.algysRadio),
+            
+            Radio(title: DataManager.shared.stations[6],
+                  icon: "duoraanRadio",
+                  station: RadioStreamURL.duoraanRadio)
         ]
     }
 }

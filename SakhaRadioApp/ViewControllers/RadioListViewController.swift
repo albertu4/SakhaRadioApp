@@ -7,7 +7,6 @@
 
 import UIKit
 import AVKit
-import MediaPlayer
 
 class RadioListViewController: UIViewController {
     
@@ -110,6 +109,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         
         content.image = UIImage(named: radioStation.icon)
         content.imageProperties.reservedLayoutSize = CGSize(width: 60, height: 60)
+        content.imageProperties.cornerRadius = 20
         content.directionalLayoutMargins.leading = 25
         
         cell.contentConfiguration = content
@@ -168,6 +168,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         showPlayerTitleAndIcon()
     }
     
+    // Remote player control
     override func remoteControlReceived(with event: UIEvent?) {
         super.remoteControlReceived(with: event)
         guard let event = event, event.type == .remoteControl else { return }
@@ -179,10 +180,6 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
             radioPlayer.pause()
         case .remoteControlTogglePlayPause:
             togglePlayAndPause()
-        case .remoteControlNextTrack:
-            print("next")
-        case .remoteControlPreviousTrack:
-            print("previous")
         default:
             break
         }
