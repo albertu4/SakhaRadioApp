@@ -7,22 +7,18 @@
 
 import UIKit
 import AVKit
+import MediaPlayer
 
 class RadioListViewController: UIViewController {
     
     // MARK: -IBOutlets
     @IBOutlet weak var volumeSlider: UISlider!
-    
     @IBOutlet weak var playerButtonLabel: UIButton!
-    
     @IBOutlet weak var radioIcon: UIImageView!
-    
     @IBOutlet weak var radioTitle: UILabel!
     
     //MARK: -Private properties
     private var radioList = Radio.getRadioStation()
-    
-    private var animationStarted = false
     
     let radioPlayer: AVPlayer = {
         let radioPlayer = AVPlayer()
@@ -30,13 +26,16 @@ class RadioListViewController: UIViewController {
     }()
     
     private var lastRadioURL = ""
-
+    
     //MARK: - overrides
     override func viewDidLoad() {
         super.viewDidLoad()
         radioPlayer.volume = volumeSlider.value
         radioIcon.layer.cornerRadius = 15
         setupNavigationBar()
+        
+        setupNotifications()
+        setupRemoteAudioControls()
     }
     
     //MARK: - IBActions
@@ -54,9 +53,10 @@ class RadioListViewController: UIViewController {
             radioPlayer.pause()
         }
         lastRadioURL = url
-        guard let radioStream = URL(string: url) else { return }
+        guard let radioStream = URL(string: lastRadioURL) else { return }
         let radioItem = AVPlayerItem(url: radioStream)
         radioPlayer.replaceCurrentItem(with: radioItem)
+        setActiveAudioSession()
         
         playAndPauseRadio()
         playerButtonLabel.isEnabled = true
@@ -65,17 +65,13 @@ class RadioListViewController: UIViewController {
     private func playAndPauseRadio() {
         if radioPlayer.timeControlStatus == .paused {
             radioPlayer.play()
-            reduceRadioImage()
+            reduceRadioPlayerButton()
             playerButtonLabel.setImage(UIImage(systemName: "pause.circle.fill"), for: .normal)
         } else {
             radioPlayer.pause()
-            enlargeRadioImage()
+            enlargeRadioPlayerButton()
             playerButtonLabel.setImage(UIImage(systemName: "play.circle"), for: .normal)
         }
-    }
-    
-    private func togglePlayAndPause() {
-        radioPlayer.timeControlStatus == .playing ? radioPlayer.pause(): radioPlayer.pause()
     }
     
     private func setupNavigationBar() {
@@ -84,9 +80,17 @@ class RadioListViewController: UIViewController {
         navBarAppearance.backgroundColor = UIColor(named: "mainColor")
         navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+        
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+    }
+    
+    private func setActiveAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("AudioSessions doesn't activated")
+        }
     }
 }
 
@@ -123,10 +127,13 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
             setPlayerData(index: indexPath.row)
         }
         playRadio(with: radioURL)
+        
+        setupNowPlaying(station: radioList[indexPath.row].title,
+                        image: radioList[indexPath.row].icon)
     }
     
     //MARK: - Animations
-    private func enlargeRadioImage() {
+    private func enlargeRadioPlayerButton() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        usingSpringWithDamping: 0.5,
@@ -137,7 +144,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         }, completion: nil)
     }
     
-    private func reduceRadioImage() {
+    private func reduceRadioPlayerButton() {
         UIView.animate(withDuration: 1,
                        delay: 0,
                        usingSpringWithDamping: 0.5,
@@ -151,7 +158,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     private func showPlayerTitleAndIcon() {
         UIView.animate(withDuration: 2,
-                       delay: 0.2,
+                       delay: 0.3,
                        usingSpringWithDamping: 0.5,
                        initialSpringVelocity: 1,
                        options: .curveEaseInOut,
@@ -169,20 +176,84 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         showPlayerTitleAndIcon()
     }
     
-    // Remote player control
-    override func remoteControlReceived(with event: UIEvent?) {
-        super.remoteControlReceived(with: event)
-        guard let event = event, event.type == .remoteControl else { return }
+    // MARK: - Resume playing after interruption
+    private func setupNotifications() {
+        let nc = NotificationCenter.default
+        nc.addObserver(self,
+                       selector: #selector(handleInterruption),
+                       name: AVAudioSession.interruptionNotification,
+                       object: AVAudioSession.sharedInstance())
+    }
+    
+    @objc func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else { return }
         
-        switch event.subtype {
-        case .remoteControlPlay:
-            radioPlayer.play()
-        case .remoteControlPause:
-            radioPlayer.pause()
-        case .remoteControlTogglePlayPause:
-            togglePlayAndPause()
+        switch type {
+        case .began:
+            print(type)
+            
         default:
-            break
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                radioPlayer.play()
+            } else {
+                radioPlayer.pause()
+            }
         }
     }
+    
+    // MARK: - Remote Control
+    private func setupRemoteAudioControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        // Add handler for Play Command
+        commandCenter.playCommand.addTarget { [unowned self] event in
+            if self.radioPlayer.rate == 0.0 {
+                self.radioPlayer.play()
+                return .success
+            }
+            return .commandFailed
+        }
+        
+        // Add handler for Pause Command
+        commandCenter.pauseCommand.addTarget { [unowned self] event in
+            if self.radioPlayer.rate == 1.0 {
+                self.radioPlayer.pause()
+                return .success
+            }
+            return .commandFailed
+        }
+    }
+    
+    private func setupNowPlaying(station: String, image: String) {
+        // Define Now Playing Info
+        var nowPlayingInfo = [String : Any]()
+        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = station
+        
+        if let image = UIImage(named: image) {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { size in
+                return image
+            }
+        }
+        nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = true
+        
+        
+        // Set the metadata
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+    
+    //    func updateNowPlaying(isPause: Bool) {
+    //            // Define Now Playing Info
+    //            let nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo!
+    //
+    //            //nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
+    //            //nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPause ? 0 : 1
+    //
+    //            // Set the metadata
+    //            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    //        }
 }

@@ -13,13 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        //Remote control
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
         //Create audio session
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try audioSession.setCategory(.playback,
+                                         mode: .default,
+                                         options: [])
         } catch {
             print("Failed to set audio session category")
         }
@@ -44,7 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
+    
 }
 
