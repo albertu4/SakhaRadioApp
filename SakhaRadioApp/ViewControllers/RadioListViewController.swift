@@ -35,7 +35,7 @@ class RadioListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         radioPlayer.volume = volumeSlider.value
-        radioIcon.frame = CGRect(x: 2, y: 2, width: 2, height: 2)
+        radioIcon.layer.cornerRadius = 15
         setupNavigationBar()
     }
     
@@ -99,6 +99,8 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        tableView.rowHeight = 80
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "radioStation", for: indexPath)
         var content = cell.defaultContentConfiguration()
         let radioStation = radioList[indexPath.row]
@@ -108,8 +110,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         content.textProperties.font = .systemFont(ofSize: 18, weight: .medium)
         
         content.image = UIImage(named: radioStation.icon)
-        content.imageProperties.reservedLayoutSize = CGSize(width: 60, height: 60)
-        content.imageProperties.cornerRadius = 20
+        content.imageProperties.cornerRadius = tableView.rowHeight / 2
         content.directionalLayoutMargins.leading = 25
         
         cell.contentConfiguration = content

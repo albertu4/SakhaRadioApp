@@ -60,7 +60,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RcK-rv-k5F">
                                                 <rect key="frame" x="10" y="10" width="355" height="100"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="uvk-PV-GRM">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uvk-PV-GRM">
                                                         <rect key="frame" x="0.0" y="0.0" width="355" height="70"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MXC-2n-Y7u">
@@ -82,10 +82,10 @@
                                                                 </connections>
                                                             </button>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bvb-x3-hFN">
-                                                                <rect key="frame" x="75" y="5" width="80" height="60"/>
+                                                                <rect key="frame" x="80" y="0.0" width="70" height="70"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="60" id="Vq5-j6-GfB"/>
-                                                                    <constraint firstAttribute="width" constant="80" id="bIp-By-Ghz"/>
+                                                                    <constraint firstAttribute="height" constant="70" id="Vq5-j6-GfB"/>
+                                                                    <constraint firstAttribute="width" constant="70" id="bIp-By-Ghz"/>
                                                                 </constraints>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXb-T3-w2W">
