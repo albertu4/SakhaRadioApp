@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Create audio session
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowAirPlay])
+            try audioSession.setCategory(.playback, mode: .default, options: [.mixWithOthers])
         } catch {
             print("Failed to set audio session category")
         }
