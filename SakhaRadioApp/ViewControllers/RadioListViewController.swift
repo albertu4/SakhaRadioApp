@@ -166,7 +166,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
             completion(true)
         }
-        action.backgroundColor = .systemPurple
+        action.backgroundColor = .systemYellow
         action.image = UIImage(systemName: "message.fill")
         return action
     }
