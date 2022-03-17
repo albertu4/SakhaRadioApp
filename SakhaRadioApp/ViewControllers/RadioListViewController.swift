@@ -25,7 +25,7 @@ class RadioListViewController: UIViewController {
         return radioPlayer
     }()
     
-    private var lastRadioStationURL = ""
+    private var lastSelectedIndexPath = 100
     
     //MARK: - overrides
     override func viewDidLoad() {
@@ -45,9 +45,15 @@ class RadioListViewController: UIViewController {
     }
     
     //MARK: - Radio Player private methods
-    private func playRadio(with url: String) {
-        setRadioItem(url: url)
+    private func playRadio(with index: Int) {
+        setRadioItem(index: index)
         setActiveAudioSession()
+        setupNowPlaying(station: radioList[index].title,
+                        image: radioList[index].icon)
+        
+        if radioTitle.text != radioList[index].title {
+            setPlayerData(index: index)
+        }
         
         playerButtonLabel.isEnabled = true
         playAndPauseRadio()
@@ -73,12 +79,30 @@ class RadioListViewController: UIViewController {
         playerButtonLabel.setImage(UIImage(systemName: "play.circle"), for: .normal)
     }
     
-    private func setRadioItem(url: String){
-        if lastRadioStationURL != url {
+    private func playPreviousRadioStation() {
+        if lastSelectedIndexPath > 0 {
+            playRadio(with: lastSelectedIndexPath - 1)
+        } else {
+            playRadio(with: radioList.count - 1)
+        }
+    }
+    
+    private func playNextRadioStation() {
+        if lastSelectedIndexPath < radioList.count - 1 {
+            playRadio(with: lastSelectedIndexPath + 1)
+        } else {
+            playRadio(with: radioList.startIndex)
+        }
+    }
+    
+    private func setRadioItem(index: Int){
+        if lastSelectedIndexPath != index {
             radioPlayer.pause()
         }
-        lastRadioStationURL = url
-        guard let radioStream = URL(string: lastRadioStationURL) else { return }
+        lastSelectedIndexPath = index
+        let radioURL = radioList[lastSelectedIndexPath].station.rawValue
+        
+        guard let radioStream = URL(string: radioURL) else { return }
         let radioItem = AVPlayerItem(url: radioStream)
         radioPlayer.replaceCurrentItem(with: radioItem)
     }
@@ -134,14 +158,12 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let radioURL = radioList[indexPath.row].station.rawValue
-        if radioTitle.text != radioList[indexPath.row].title {
-            setPlayerData(index: indexPath.row)
+        if lastSelectedIndexPath == indexPath.row {
+            playAndPauseRadio()
+            return
         }
-        playRadio(with: radioURL)
         
-        setupNowPlaying(station: radioList[indexPath.row].title,
-                        image: radioList[indexPath.row].icon)
+        playRadio(with: indexPath.row)
     }
 }
 
@@ -280,6 +302,16 @@ extension RadioListViewController {
             }
             return .commandFailed
         }
+        
+        commandCenter.previousTrackCommand.addTarget { [unowned self] event in
+            playPreviousRadioStation()
+            return .success
+        }
+        
+        commandCenter.nextTrackCommand.addTarget { [unowned self] event in
+            playNextRadioStation()
+            return .success
+        }
     }
     
     private func setupNowPlaying(station: String, image: String) {
@@ -297,16 +329,5 @@ extension RadioListViewController {
         // Set the metadata
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
-    
-    //    func updateNowPlaying(isPause: Bool) {
-    //            // Define Now Playing Info
-    //            let nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo!
-    //
-    //            //nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
-    //            //nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPause ? 0 : 1
-    //
-    //            // Set the metadata
-    //            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-    //        }
     
 }

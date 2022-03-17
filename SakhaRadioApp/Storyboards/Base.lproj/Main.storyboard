@@ -26,7 +26,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="454"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="radioStation" textLabel="8IS-ZT-tE7" imageView="XAb-mV-qWt" style="IBUITableViewCellStyleDefault" id="WWy-Rk-oHQ">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="radioStation" textLabel="8IS-ZT-tE7" imageView="XAb-mV-qWt" style="IBUITableViewCellStyleDefault" id="WWy-Rk-oHQ">
                                                 <rect key="frame" x="0.0" y="44.5" width="375" height="43.5"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WWy-Rk-oHQ" id="OJL-OT-jtE">
