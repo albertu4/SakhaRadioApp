@@ -253,6 +253,8 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         commandCenter.playCommand.addTarget { [unowned self] event in
             if self.radioPlayer.rate == 0.0 {
                 self.radioPlayer.play()
+                reduceRadioPlayerButton()
+                playerButtonLabel.setImage(UIImage(systemName: "pause.circle.fill"), for: .normal)
                 return .success
             }
             return .commandFailed
@@ -262,6 +264,8 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         commandCenter.pauseCommand.addTarget { [unowned self] event in
             if self.radioPlayer.rate == 1.0 {
                 self.radioPlayer.pause()
+                enlargeRadioPlayerButton()
+                playerButtonLabel.setImage(UIImage(systemName: "play.circle"), for: .normal)
                 return .success
             }
             return .commandFailed
