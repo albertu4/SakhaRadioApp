@@ -31,7 +31,7 @@ class RadioListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         radioPlayer.volume = volumeSlider.value
-        radioIcon.layer.cornerRadius = 15
+        radioIcon.layer.cornerRadius = 10
         setupNavigationBar()
         
         setupNotifications()
@@ -110,7 +110,9 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         let radioStation = radioList[indexPath.row]
         
         content.text = radioStation.title
+        content.secondaryText = radioStation.frequency
         content.textProperties.alignment = .center
+        content.secondaryTextProperties.alignment = .center
         content.textProperties.font = .systemFont(ofSize: 18, weight: .medium)
         
         content.image = UIImage(named: radioStation.icon)
@@ -130,6 +132,43 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         
         setupNowPlaying(station: radioList[indexPath.row].title,
                         image: radioList[indexPath.row].icon)
+    }
+    
+    //MARK: - SwipeActions
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let call = callRadioStation(at: indexPath)
+        let message = sendMessage(at: indexPath)
+        return UISwipeActionsConfiguration(actions: [call, message])
+        
+    }
+    
+    private func callRadioStation(at indexPath: IndexPath) -> UIContextualAction {
+        let radioStation = radioList[indexPath.row]
+        
+        let action = UIContextualAction(style: .normal, title: "Call") {
+            (action, view, completion) in
+            guard let url = URL(string: "telprompt://\(radioStation.numberFolCall)"),
+                  UIApplication.shared.canOpenURL(url) else { return }
+            
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            completion(true)
+        }
+        action.backgroundColor = .systemGreen
+        action.image = UIImage(systemName: "phone.fill")
+        return action
+    }
+    
+    private func sendMessage(at indexPath: IndexPath) -> UIContextualAction {
+        let radioStation = radioList[indexPath.row]
+        let action = UIContextualAction(style: .normal, title: "Send Message") { (action, view, completion) in
+            guard let url = URL(string: "sms://\(radioStation.numberForSMS)"),
+                  UIApplication.shared.canOpenURL(url) else { return }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            completion(true)
+        }
+        action.backgroundColor = .systemPurple
+        action.image = UIImage(systemName: "message.fill")
+        return action
     }
     
     //MARK: - Animations
