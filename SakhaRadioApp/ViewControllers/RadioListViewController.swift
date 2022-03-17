@@ -20,20 +20,17 @@ class RadioListViewController: UIViewController {
     //MARK: -Private properties
     private var radioList = Radio.getRadioStation()
     
-    let radioPlayer: AVPlayer = {
+    private let radioPlayer: AVPlayer = {
         let radioPlayer = AVPlayer()
         return radioPlayer
     }()
     
-    private var lastRadioURL = ""
+    private var lastRadioStationURL = ""
     
     //MARK: - overrides
     override func viewDidLoad() {
         super.viewDidLoad()
-        radioPlayer.volume = volumeSlider.value
-        radioIcon.layer.cornerRadius = 10
         setupNavigationBar()
-        
         setupNotifications()
         setupRemoteAudioControls()
     }
@@ -47,33 +44,54 @@ class RadioListViewController: UIViewController {
         playAndPauseRadio()
     }
     
-    //MARK: - private methods
+    //MARK: - Radio Player private methods
     private func playRadio(with url: String) {
-        if url != lastRadioURL {
-            radioPlayer.pause()
-        }
-        lastRadioURL = url
-        guard let radioStream = URL(string: lastRadioURL) else { return }
-        let radioItem = AVPlayerItem(url: radioStream)
-        radioPlayer.replaceCurrentItem(with: radioItem)
+        setRadioItem(url: url)
         setActiveAudioSession()
         
-        playAndPauseRadio()
         playerButtonLabel.isEnabled = true
+        playAndPauseRadio()
     }
     
     private func playAndPauseRadio() {
         if radioPlayer.timeControlStatus == .paused {
-            radioPlayer.play()
-            reduceRadioPlayerButton()
-            playerButtonLabel.setImage(UIImage(systemName: "pause.circle.fill"), for: .normal)
+            playRadioPlayer()
         } else {
-            radioPlayer.pause()
-            enlargeRadioPlayerButton()
-            playerButtonLabel.setImage(UIImage(systemName: "play.circle"), for: .normal)
+            pauseRadioPlayer()
         }
     }
     
+    private func playRadioPlayer() {
+        radioPlayer.play()
+        reduceRadioPlayerButton()
+        playerButtonLabel.setImage(UIImage(systemName: "pause.circle.fill"), for: .normal)
+    }
+    
+    private func pauseRadioPlayer() {
+        radioPlayer.pause()
+        enlargeRadioPlayerButton()
+        playerButtonLabel.setImage(UIImage(systemName: "play.circle"), for: .normal)
+    }
+    
+    private func setRadioItem(url: String){
+        if lastRadioStationURL != url {
+            radioPlayer.pause()
+        }
+        lastRadioStationURL = url
+        guard let radioStream = URL(string: lastRadioStationURL) else { return }
+        let radioItem = AVPlayerItem(url: radioStream)
+        radioPlayer.replaceCurrentItem(with: radioItem)
+    }
+    
+    private func setActiveAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("AudioSessions wasn't activated")
+        }
+    }
+    
+    //MARK: - Navigatioin Bar settings
     private func setupNavigationBar() {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
@@ -84,17 +102,10 @@ class RadioListViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
-    
-    private func setActiveAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("AudioSessions doesn't activated")
-        }
-    }
+     
 }
 
-//MARK: - Extensions
+//MARK: - TableView extension
 extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,7 +128,6 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         
         content.image = UIImage(named: radioStation.icon)
         content.imageProperties.cornerRadius = tableView.rowHeight / 2
-        content.directionalLayoutMargins.leading = 25
         
         cell.contentConfiguration = content
         return cell
@@ -133,15 +143,19 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         setupNowPlaying(station: radioList[indexPath.row].title,
                         image: radioList[indexPath.row].icon)
     }
+}
+
+// MARK: - Extension
+extension RadioListViewController {
     
     //MARK: - SwipeActions
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let call = callRadioStation(at: indexPath)
         let message = sendMessage(at: indexPath)
         return UISwipeActionsConfiguration(actions: [call, message])
-        
     }
     
+    // First Action
     private func callRadioStation(at indexPath: IndexPath) -> UIContextualAction {
         let radioStation = radioList[indexPath.row]
         
@@ -158,6 +172,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         return action
     }
     
+    //Second Action
     private func sendMessage(at indexPath: IndexPath) -> UIContextualAction {
         let radioStation = radioList[indexPath.row]
         let action = UIContextualAction(style: .normal, title: "Send Message") { (action, view, completion) in
@@ -232,8 +247,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch type {
         case .began:
-            print(type)
-            
+            print("Paused due interruption")
         default:
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
@@ -252,7 +266,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         // Add handler for Play Command
         commandCenter.playCommand.addTarget { [unowned self] event in
             if self.radioPlayer.rate == 0.0 {
-                self.radioPlayer.play()
+                playRadioPlayer()
                 return .success
             }
             return .commandFailed
@@ -261,7 +275,7 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         // Add handler for Pause Command
         commandCenter.pauseCommand.addTarget { [unowned self] event in
             if self.radioPlayer.rate == 1.0 {
-                self.radioPlayer.pause()
+                pauseRadioPlayer()
                 return .success
             }
             return .commandFailed
@@ -280,7 +294,6 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
         }
         nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = true
         
-        
         // Set the metadata
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
@@ -295,4 +308,5 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     //            // Set the metadata
     //            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     //        }
+    
 }
