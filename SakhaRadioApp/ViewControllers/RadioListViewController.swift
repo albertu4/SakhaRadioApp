@@ -158,11 +158,11 @@ extension RadioListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if lastSelectedIndexPath == indexPath.row {
             playAndPauseRadio()
             return
         }
-        
         playRadio(with: indexPath.row)
     }
 }
