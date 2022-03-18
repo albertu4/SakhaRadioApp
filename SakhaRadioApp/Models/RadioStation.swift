@@ -26,7 +26,7 @@ struct Radio {
                   frequency: "FM 107,1",
                   icon: "tetimRadio",
                   station: RadioStreamURL.tetimFM,
-                  numberFolCall: +74112320066,
+                  numberFolCall: +74112420088,
                   numberForSMS: +74112320066),
             
             Radio(title: DataManager.shared.stations[2],

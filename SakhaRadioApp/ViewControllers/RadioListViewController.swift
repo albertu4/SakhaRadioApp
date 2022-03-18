@@ -198,7 +198,7 @@ extension RadioListViewController {
     private func sendMessage(at indexPath: IndexPath) -> UIContextualAction {
         let radioStation = radioList[indexPath.row]
         let action = UIContextualAction(style: .normal, title: "Send Message") { (action, view, completion) in
-            guard let url = URL(string: "sms://\(radioStation.numberForSMS)"),
+            guard let url = URL(string: "https://api.whatsapp.com/send?phone=\(radioStation.numberForSMS)"),
                   UIApplication.shared.canOpenURL(url) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
             completion(true)
