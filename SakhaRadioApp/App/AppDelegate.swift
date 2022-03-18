@@ -26,6 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    //Lock portrait orientation
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        UIInterfaceOrientationMask.portrait
+    }
+    
     func applicationWillTerminate(_ application: UIApplication) {
     }
 
